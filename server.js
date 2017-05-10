@@ -1,5 +1,5 @@
 var express = require('express');
-var mongo = require("mongodb");
+var mongo = require("mongodb").MongoClient;
 
 var dataURL = process.env.MONGOLAB_URI;
 
