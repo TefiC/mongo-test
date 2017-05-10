@@ -1,10 +1,31 @@
-var express = require('express')
-var app = express()
+var express = require('express');
+var mongo = require("mongodb");
+
+var dataURL = process.env.MONGOLAB_URI;
+
+var app = express();
 
 app.get('/', function (req, res) {
-  res.send('Hello World!')
+    
+    res.writeHead(200, {'content-type':'application/JSON'});
+    
+    mongo.connect(dataURL, function(err, db) {
+       if (err) throw err;
+       
+       var collection = db.collection('data');
+       
+       collection.insert({
+           "key" :"test"
+       }, function(err, data) {
+          if (err) throw err;
+          
+          db.close();
+          res.end(JSON.stringify(data["ops"][0]));
+       });
+    });
+    
 })
 
 app.listen(process.env.PORT, function () {
-  console.log('Example app listening on port!')
+  console.log('Example app listening on port!');
 })
